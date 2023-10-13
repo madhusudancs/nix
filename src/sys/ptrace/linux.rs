@@ -248,29 +248,15 @@ pub fn setregs(pid: Pid, regs: user_regs_struct) -> Result<()> {
 }
 
 /// Get user registers, as with `ptrace(PTRACE_GETREGSET, ...)`
-#[cfg(all(
-    target_os = "linux",
-    any(
-        all(
-            target_arch = "aarch64",
-            any(target_env = "gnu", target_env = "musl")
-        )
-    )
-))]
+#[cfg(all(target_os = "linux", not(any(target_arch = "mips",
+                                       target_arch = "mips64"))))]
 pub fn getregset(pid: Pid) -> Result<user_regs_struct> {
     ptrace_get_data::<user_regs_struct>(Request::PTRACE_GETREGSET, pid)
 }
 
 /// Set user registers, as with `ptrace(PTRACE_SETREGSET, ...)`
-#[cfg(all(
-    target_os = "linux",
-    any(
-        all(
-            target_arch = "aarch64",
-            any(target_env = "gnu", target_env = "musl")
-        )
-    )
-))]
+#[cfg(all(target_os = "linux", not(any(target_arch = "mips",
+                                       target_arch = "mips64"))))]
 pub fn setregset(pid: Pid, regs: user_regs_struct) -> Result<()> {
     let res = unsafe {
         libc::ptrace(
