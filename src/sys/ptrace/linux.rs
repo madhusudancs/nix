@@ -247,6 +247,42 @@ pub fn setregs(pid: Pid, regs: user_regs_struct) -> Result<()> {
     Errno::result(res).map(drop)
 }
 
+/// Get user registers, as with `ptrace(PTRACE_GETREGSET, ...)`
+#[cfg(all(
+    target_os = "linux",
+    any(
+        all(
+            target_arch = "aarch64",
+            any(target_env = "gnu", target_env = "musl")
+        )
+    )
+))]
+pub fn getregset(pid: Pid) -> Result<user_regs_struct> {
+    ptrace_get_data::<user_regs_struct>(Request::PTRACE_GETREGSET, pid)
+}
+
+/// Set user registers, as with `ptrace(PTRACE_SETREGSET, ...)`
+#[cfg(all(
+    target_os = "linux",
+    any(
+        all(
+            target_arch = "aarch64",
+            any(target_env = "gnu", target_env = "musl")
+        )
+    )
+))]
+pub fn setregset(pid: Pid, regs: user_regs_struct) -> Result<()> {
+    let res = unsafe {
+        libc::ptrace(
+            Request::PTRACE_SETREGSET as RequestType,
+            libc::pid_t::from(pid),
+            ptr::null_mut::<c_void>(),
+            &regs as *const _ as *const c_void,
+        )
+    };
+    Errno::result(res).map(drop)
+}
+
 /// Function for ptrace requests that return values from the data field.
 /// Some ptrace get requests populate structs or larger elements than `c_long`
 /// and therefore use the data field to return values. This function handles these
