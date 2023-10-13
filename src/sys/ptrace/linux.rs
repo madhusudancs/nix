@@ -17,7 +17,8 @@ pub type AddressType = *mut ::libc::c_void;
             target_arch = "x86_64",
             any(target_env = "gnu", target_env = "musl")
         ),
-        all(target_arch = "x86", target_env = "gnu")
+        all(target_arch = "x86", target_env = "gnu"),
+        all(target_arch = "aarch64", target_env = "gnu")
     )
 ))]
 use libc::user_regs_struct;
@@ -206,7 +207,8 @@ fn ptrace_peek(
             target_arch = "x86_64",
             any(target_env = "gnu", target_env = "musl")
         ),
-        all(target_arch = "x86", target_env = "gnu")
+        all(target_arch = "x86", target_env = "gnu"),
+        all(target_arch = "aarch64", target_env = "gnu")
     )
 ))]
 pub fn getregs(pid: Pid) -> Result<user_regs_struct> {
@@ -221,7 +223,8 @@ pub fn getregs(pid: Pid) -> Result<user_regs_struct> {
             target_arch = "x86_64",
             any(target_env = "gnu", target_env = "musl")
         ),
-        all(target_arch = "x86", target_env = "gnu")
+        all(target_arch = "x86", target_env = "gnu"),
+        all(target_arch = "aarch64", target_env = "gnu")
     )
 ))]
 pub fn setregs(pid: Pid, regs: user_regs_struct) -> Result<()> {
