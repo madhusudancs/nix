@@ -56,7 +56,6 @@ libc_enum! {
                                                target_arch = "mips",
                                                target_arch = "mips64",
                                                target_arch = "x86_64",
-                                               target_arch = "aarch64",
                                                target_pointer_width = "32"))))]
         PTRACE_GETREGS,
         #[cfg(any(all(target_os = "android", target_pointer_width = "32"),
@@ -64,7 +63,6 @@ libc_enum! {
                                                target_arch = "mips",
                                                target_arch = "mips64",
                                                target_arch = "x86_64",
-                                               target_arch = "aarch64",
                                                target_pointer_width = "32"))))]
         PTRACE_SETREGS,
         #[cfg(any(all(target_os = "android", target_pointer_width = "32"),
@@ -209,11 +207,7 @@ fn ptrace_peek(
             target_arch = "x86_64",
             any(target_env = "gnu", target_env = "musl")
         ),
-        all(target_arch = "x86", target_env = "gnu"),
-        all(
-            target_arch = "aarch64",
-            any(target_env = "gnu", target_env = "musl")
-        )
+        all(target_arch = "x86", target_env = "gnu")
     )
 ))]
 pub fn getregs(pid: Pid) -> Result<user_regs_struct> {
@@ -228,11 +222,7 @@ pub fn getregs(pid: Pid) -> Result<user_regs_struct> {
             target_arch = "x86_64",
             any(target_env = "gnu", target_env = "musl")
         ),
-        all(target_arch = "x86", target_env = "gnu"),
-        all(
-            target_arch = "aarch64",
-            any(target_env = "gnu", target_env = "musl")
-        )
+        all(target_arch = "x86", target_env = "gnu")
     )
 ))]
 pub fn setregs(pid: Pid, regs: user_regs_struct) -> Result<()> {
